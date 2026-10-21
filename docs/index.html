@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Workspace Setup · Big Spoon</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Step-by-step guide for connecting your company's Google Workspace to the CRM Big Spoon builds for you.">
+<style>
+@page { size: Letter; margin: 0.7in 0.75in 0.8in; }
+:root {
+  --ink: #1f2328; --muted: #5b6370; --line: #d8dde3; --soft: #f5f7f9;
+  --brand: #e2552b; --brand-soft: #fdeee8; --blue: #1a73e8; --blue-soft: #e8f0fe;
+  --warn: #9a6700; --warn-soft: #fff8e1; --ok: #1e7f3c; --ok-soft: #e6f4ea;
+  --red: #d93025;
+}
+* { box-sizing: border-box; }
+body { font-family: "Inter", "DejaVu Sans", sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.5; margin: 0; }
+h1 { font-size: 24pt; line-height: 1.15; margin: 0 0 8pt; letter-spacing: -0.01em; }
+h2 { font-size: 15pt; margin: 0 0 6pt; padding-top: 2pt; }
+h3 { font-size: 11.5pt; margin: 14pt 0 4pt; }
+p { margin: 0 0 7pt; }
+ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
+li { margin: 0 0 3pt; }
+code, .mono { font-family: "DejaVu Sans Mono", monospace; font-size: 9pt; background: var(--soft); border: 1px solid var(--line); border-radius: 3px; padding: 0 3px; }
+b, strong { font-weight: 600; }
+.ui { font-weight: 600; color: #0b57d0; }
+.page-break { break-before: page; }
+.keep { break-inside: avoid; }
+
+/* cover */
+.cover { display: block; }
+.cover .kicker { color: var(--brand); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 9pt; margin-bottom: 10pt; }
+.cover .lead { font-size: 12.5pt; color: var(--muted); max-width: 5.6in; margin-bottom: 18pt; }
+.cover .foot { margin-top: 12pt; color: var(--muted); font-size: 9pt; border-top: 1px solid var(--line); padding-top: 8pt; }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10pt; margin: 4pt 0 16pt; }
+.fact { border: 1px solid var(--line); border-radius: 8px; padding: 9pt 11pt; }
+.fact .k { font-size: 8.5pt; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.fact .v { font-size: 12pt; font-weight: 600; }
+
+/* boxes */
+.box { border-radius: 8px; padding: 10pt 12pt; margin: 8pt 0 10pt; break-inside: avoid; }
+.box.info { background: var(--blue-soft); border-left: 4px solid var(--blue); }
+.box.warn { background: var(--warn-soft); border-left: 4px solid #e3a008; }
+.box.ok { background: var(--ok-soft); border-left: 4px solid var(--ok); }
+.box.brand { background: var(--brand-soft); border-left: 4px solid var(--brand); }
+.box .t { font-weight: 700; margin-bottom: 3pt; }
+.box p:last-child, .box ul:last-child { margin-bottom: 0; }
+
+table.vals { width: 100%; border-collapse: collapse; margin: 6pt 0 10pt; font-size: 9.5pt; break-inside: avoid; }
+table.vals th, table.vals td { border: 1px solid var(--line); padding: 6pt 8pt; text-align: left; vertical-align: top; }
+table.vals th { background: var(--soft); font-weight: 600; }
+td.blank { color: #9aa3ad; font-style: italic; }
+
+/* flow */
+.flow { display: grid; grid-template-columns: 1fr 22pt 1fr 22pt 1fr; align-items: stretch; margin: 6pt 0 14pt; break-inside: avoid; }
+.flow .stage { border: 1.5px solid var(--line); border-radius: 8px; padding: 9pt 10pt; }
+.flow .stage.you { border-color: var(--brand); background: var(--brand-soft); }
+.flow .stage .who { font-size: 8pt; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+.flow .stage .name { font-weight: 700; font-size: 11pt; margin: 2pt 0; }
+.flow .stage .d { font-size: 9pt; color: var(--muted); }
+.flow .arrow { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 14pt; }
+
+/* steps */
+.step { margin: 0 0 14pt; }
+.step-head { display: flex; align-items: center; gap: 9pt; margin: 4pt 0 6pt; break-after: avoid; }
+.step-num { flex: none; width: 24pt; height: 24pt; border-radius: 50%; background: var(--brand); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 11pt; }
+.step-title { font-size: 13pt; font-weight: 700; }
+.step-meta { font-size: 8.5pt; color: var(--muted); margin-left: auto; white-space: nowrap; }
+.part { background: var(--ink); color: #fff; border-radius: 8px; padding: 12pt 14pt; margin: 0 0 14pt; }
+.part .p { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .08em; opacity: .75; }
+.part .n { font-size: 17pt; font-weight: 700; }
+.part .d { font-size: 10pt; opacity: .85; }
+
+/* screenshot mockups */
+figure.shot { margin: 8pt 0 12pt; break-inside: avoid; }
+figure.shot figcaption { font-size: 8.5pt; color: var(--muted); margin-top: 4pt; }
+.screen { border: 1px solid #c4cad1; border-radius: 8px; overflow: hidden; font-size: 8.5pt; line-height: 1.35; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.08); position: relative; }
+.chrome { background: #eef1f4; padding: 5pt 8pt; display: flex; gap: 6pt; align-items: center; border-bottom: 1px solid #d7dce1; }
+.chrome .dots span { display: inline-block; width: 6pt; height: 6pt; border-radius: 50%; background: #c9ced4; margin-right: 3pt; }
+.chrome .url { flex: 1; background: #fff; border-radius: 10pt; padding: 2pt 9pt; color: #5f6368; font-family: "DejaVu Sans Mono", monospace; font-size: 7.5pt; }
+.gbar { display: flex; align-items: center; gap: 9pt; padding: 6pt 10pt; border-bottom: 1px solid #e3e6ea; }
+.gbar .logo { font-weight: 600; color: #3c4043; font-size: 10pt; }
+.gbar .logo b { color: #1a73e8; }
+.gbar .picker { border: 1px solid #dadce0; border-radius: 4px; padding: 2pt 8pt; color: #3c4043; }
+.gbar .search { flex: 1; background: #f1f3f4; border-radius: 4px; padding: 3pt 8pt; color: #80868b; }
+.gbar .acct { width: 16pt; height: 16pt; border-radius: 50%; background: #7e57c2; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 8pt; font-weight: 700; }
+.gbody { display: flex; min-height: 120pt; }
+.gnav { width: 1.55in; border-right: 1px solid #e3e6ea; padding: 7pt 0; background: #fff; flex: none; }
+.gnav .h { font-weight: 600; padding: 2pt 10pt 5pt; color: #3c4043; }
+.gnav .i { padding: 3pt 10pt; color: #3c4043; }
+.gnav .i.on { background: #e8f0fe; color: #1967d2; font-weight: 600; border-radius: 0 12pt 12pt 0; margin-right: 6pt; }
+.gmain { flex: 1; padding: 9pt 12pt; }
+.gmain .title { font-size: 11.5pt; color: #202124; margin-bottom: 6pt; }
+.gmain .sub { color: #5f6368; margin-bottom: 6pt; }
+.btn { display: inline-block; border-radius: 4px; padding: 3pt 9pt; font-weight: 600; font-size: 8pt; }
+.btn.p { background: #1a73e8; color: #fff; }
+.btn.s { border: 1px solid #dadce0; color: #1a73e8; background: #fff; }
+.fld { border: 1px solid #9aa0a6; border-radius: 4px; padding: 4pt 7pt; margin: 2pt 0 6pt; color: #202124; background: #fff; position: relative; }
+.fld .lbl { position: absolute; top: -5.5pt; left: 6pt; background: #fff; padding: 0 2pt; font-size: 6.5pt; color: #5f6368; }
+.radio { margin: 2pt 0; }
+.radio::before { content: ""; display: inline-block; width: 7pt; height: 7pt; border-radius: 50%; border: 1.5px solid #5f6368; margin-right: 4pt; vertical-align: -1pt; }
+.radio.on::before { border-color: #1a73e8; background: radial-gradient(#1a73e8 45%, #fff 50%); }
+.check::before { content: "✓"; display: inline-block; width: 8pt; height: 8pt; border-radius: 2px; background: #1a73e8; color: #fff; font-size: 6.5pt; text-align: center; line-height: 8pt; margin-right: 4pt; }
+.uncheck::before { content: ""; display: inline-block; width: 7pt; height: 7pt; border-radius: 2px; border: 1.5px solid #5f6368; margin-right: 4pt; vertical-align: -1pt; }
+.gtable { width: 100%; border-collapse: collapse; }
+.gtable th, .gtable td { text-align: left; padding: 3pt 5pt; border-bottom: 1px solid #e8eaed; }
+.gtable th { color: #5f6368; font-weight: 600; }
+.chip { display: inline-block; background: #e6f4ea; color: #137333; border-radius: 8pt; padding: 0 6pt; font-size: 7.5pt; font-weight: 600; }
+.chip.grey { background: #f1f3f4; color: #5f6368; }
+.dialog { border: 1px solid #dadce0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.15); padding: 9pt 11pt; background: #fff; }
+.mark { outline: 2px solid var(--red); outline-offset: 2px; border-radius: 3px; }
+.co { display: inline-flex; width: 13pt; height: 13pt; border-radius: 50%; background: var(--red); color: #fff; font-weight: 700; font-size: 7.5pt; align-items: center; justify-content: center; vertical-align: middle; margin: 0 2pt; }
+.admin-bar { background: #fff; border-bottom: 1px solid #e3e6ea; padding: 6pt 10pt; display: flex; gap: 10pt; align-items: center; }
+.admin-bar .logo { font-weight: 600; color: #5f6368; }
+.crumbs { color: #5f6368; margin-bottom: 6pt; }
+.crumbs b { color: #202124; }
+.illus { position: absolute; bottom: 3pt; right: 6pt; font-size: 6.5pt; color: #9aa0a6; letter-spacing: .05em; text-transform: uppercase; }
+.legend { font-size: 9pt; margin: 3pt 0 0; padding-left: 0; list-style: none; }
+.legend li { margin: 2pt 0; }
+
+.check-list { list-style: none; padding-left: 0; }
+.check-list li { padding-left: 18pt; position: relative; margin-bottom: 5pt; }
+.check-list li::before { content: ""; position: absolute; left: 0; top: 2pt; width: 10pt; height: 10pt; border: 1.5px solid var(--muted); border-radius: 2px; }
+.small { font-size: 9pt; color: var(--muted); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; }
+
+figure.shot, .box, .step-head { break-inside: avoid; }
+.step-head { break-after: avoid; }
+.part { break-after: avoid; }
+
+/* feature tags */
+.tag { display: inline-block; border-radius: 9pt; padding: 1pt 7pt; font-size: 8pt; font-weight: 600; margin: 0 3pt 3pt 0; white-space: nowrap; }
+.tag.all { background: var(--ok-soft); color: var(--ok); }
+.tag.opt { background: #f3e8fd; color: #7627bb; }
+.applies { margin: -2pt 0 6pt 33pt; font-size: 8.5pt; color: var(--muted); }
+table.feat { width: 100%; border-collapse: collapse; font-size: 8.5pt; line-height: 1.35; margin: 6pt 0 8pt; }
+table.feat th, table.feat td { border: 1px solid var(--line); padding: 3.5pt 6pt; text-align: left; vertical-align: top; }
+table.feat th { background: var(--soft); font-weight: 600; }
+table.feat td.box { width: 16pt; text-align: center; }
+table.feat td.box span { display: inline-block; width: 9pt; height: 9pt; border: 1.5px solid var(--muted); border-radius: 2px; }
+table.feat .who { white-space: nowrap; }
+
+
+/* ---- screen layout ---- */
+:root { color-scheme: light; }
+html { background: #f6f7f9; }
+body { background: #f6f7f9; font-size: 15px; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 80px; }
+header.hero { background: #fff; border-bottom: 1px solid var(--line); }
+header.hero .wrap { padding-top: 36px; padding-bottom: 28px; }
+.brandline { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.brandline .who { font-weight: 700; letter-spacing: .02em; }
+.brandline .who span { color: var(--brand); }
+.card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; margin: 18px 0; }
+.card h2 { font-size: 18px; margin: 0 0 4px; }
+.card .hint { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+.num { display: inline-flex; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 13px; font-weight: 700; align-items: center; justify-content: center; margin-right: 8px; vertical-align: 2px; }
+.domain-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.domain-row label { font-weight: 600; }
+.domain-input { display: flex; align-items: center; border: 1.5px solid #9aa3ad; border-radius: 8px; background: #fff; overflow: hidden; }
+.domain-input:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+.domain-input span { padding: 0 2px 0 12px; color: var(--muted); }
+.domain-input input { border: 0; outline: 0; font: inherit; padding: 10px 12px 10px 2px; width: 260px; max-width: 60vw; }
+.domain-msg { font-size: 13px; color: var(--muted); }
+.domain-msg.bad { color: var(--red); }
+.features { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+.feature { display: flex; gap: 10px; align-items: flex-start; border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 12px; cursor: pointer; background: #fff; }
+.feature:hover { border-color: #b8c0c8; }
+.feature input { margin-top: 3px; width: 17px; height: 17px; accent-color: var(--brand); flex: none; }
+.feature.on { border-color: var(--brand); background: var(--brand-soft); }
+.feature .fn { font-weight: 600; }
+.feature .fd { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.feature .fw { font-size: 11.5px; font-weight: 600; margin-top: 4px; color: #7627bb; }
+.feature .fw.each { color: var(--ok); }
+.sa-opt { margin-top: 12px; display: none; font-size: 14px; }
+.sa-opt.show { display: block; }
+.sa-opt label { display: flex; gap: 8px; align-items: flex-start; cursor: pointer; }
+.summary { position: sticky; top: 0; z-index: 5; background: rgba(246,247,249,.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.summary .wrap { display: flex; gap: 14px; align-items: center; justify-content: space-between; padding-top: 10px; padding-bottom: 10px; padding-bottom: 10px; flex-wrap: wrap; }
+.stats { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; }
+.stats b { font-size: 15px; }
+.progress { width: 120px; height: 7px; background: #e3e7eb; border-radius: 4px; overflow: hidden; display: inline-block; vertical-align: middle; margin-left: 6px; }
+.progress i { display: block; height: 100%; background: var(--ok); width: 0; transition: width .3s; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+button.act { font: inherit; font-size: 14px; font-weight: 600; border-radius: 8px; padding: 8px 13px; cursor: pointer; border: 1.5px solid var(--line); background: #fff; color: var(--ink); }
+button.act.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+button.act:hover { filter: brightness(.96); }
+.toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 9px 16px; border-radius: 8px; font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.toast.show { opacity: 1; }
+#guide .part { margin-top: 30px; }
+article.step { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 22px 8px; margin: 14px 0; scroll-margin-top: 70px; }
+article.step.is-done { border-color: #9fd3ae; }
+article.step.is-done .step-num { background: var(--ok); }
+article.step .step-head { margin-top: 0; flex-wrap: wrap; }
+.done-toggle { margin-left: auto; display: flex; gap: 6px; align-items: center; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; user-select: none; }
+.done-toggle input { width: 17px; height: 17px; accent-color: var(--ok); }
+article.step .applies { margin-left: 33px; }
+.empty-note { color: var(--muted); font-size: 14px; }
+footer.foot { color: var(--muted); font-size: 13px; text-align: center; margin-top: 30px; }
+.screen { max-width: 640px; }
+figure.shot { margin-left: 0; margin-right: 0; }
+.print-only { display: none; }
+@media (max-width: 600px) {
+  .facts { grid-template-columns: 1fr; gap: 8px; }
+  .card { padding: 16px; }
+  article.step { padding: 14px 14px 6px; }
+  .two { grid-template-columns: 1fr; }
+  .gnav { display: none; }
+  .flow { grid-template-columns: 1fr; }
+  .flow .arrow { transform: rotate(90deg); height: 18px; }
+  .done-toggle { margin-left: 33px; }
+}
+@media print {
+  html, body { background: #fff; font-size: 10.5pt; }
+  .no-print, .summary, .controls { display: none !important; }
+  .print-only { display: block; }
+  article.step { border: 0; padding: 0; margin: 0 0 12pt; break-inside: auto; }
+  .card { border: 0; padding: 0; }
+  .wrap { max-width: none; padding: 0; }
+  header.hero { border: 0; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brandline"><div class="who">Big <span>Spoon</span></div><div class="small">Questions: <b>tech@bigspoon.ai</b></div></div>
+    <div class="kicker" style="color:var(--brand);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px;margin-bottom:8px">Setup guide · For your Google Workspace administrator</div>
+    <h1>Connect your company's Google Workspace to your CRM</h1>
+    <p class="lead" style="font-size:17px;color:var(--muted);max-width:640px">These steps connect your Google Workspace to your CRM, so the Google features we agreed with you work from inside it. Enter your domain and pick your features: the steps below adjust to match.</p>
+    <div class="facts" style="margin-top:16px">
+      <div class="fact"><div class="k">Who does this</div><div class="v">A Super Admin of <span class="v-domain">yourcompany.com</span></div></div>
+      <div class="fact"><div class="k">Your time</div><div class="v" id="fact-time">About 30 minutes</div></div>
+      <div class="fact"><div class="k">Cost</div><div class="v" id="fact-cost">Free</div></div>
+    </div>
+    <div class="print-only" id="print-head"></div>
+  </div>
+</header>
+
+<div class="wrap controls">
+  <section class="card">
+    <h2><span class="num">1</span>Your company</h2>
+    <p class="hint">The domain your staff use for email. If you sign in as name@acme.com, enter acme.com.</p>
+    <div class="domain-row">
+      <label for="domain">Domain</label>
+      <div class="domain-input"><span>@</span><input id="domain" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="yourcompany.com"></div>
+      <span class="domain-msg" id="domain-msg"></span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">2</span>Features your CRM uses</h2>
+    <p class="hint">Tick what you agreed with Big Spoon. If you received a link from us, these are already ticked. <span class="tag all">All features</span> steps apply to everyone; steps tagged with a feature name appear only when it is ticked.</p>
+    <div class="features" id="features"></div>
+    <div class="sa-opt" id="sa-opt"><label><input type="checkbox" id="sa"> <span><b>Big Spoon asked us to use the service-account option for Drive import.</b> <span class="small">Leave this unticked unless we asked. It replaces the CRM's company account for Drive with a robot account, which saves a licence but needs extra policy changes.</span></span></label></div>
+  </section>
+</div>
+
+<div class="summary no-print">
+  <div class="wrap">
+    <div class="stats"><span><b id="st-steps">0</b> steps</span><span>about <b id="st-min">0</b> min</span><span><b id="st-done">0</b> done <span class="progress"><i id="st-bar"></i></span></span></div>
+    <div class="actions">
+      <button class="act" id="btn-link" type="button">Copy link</button>
+      <button class="act" id="btn-pdf" type="button">Download PDF</button>
+      <button class="act primary" id="btn-mail" type="button">Email Big Spoon</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="card" id="values"></section>
+  <div id="guide"></div>
+  <section class="card" id="faq"></section>
+  <footer class="foot">Prepared by Big Spoon · The screens on this page are illustrations; Google updates its pages, so yours may look slightly different. Your ticks are saved in this browser only; nothing is sent anywhere until you choose to email us.</footer>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<template id="tpl-open">
+<ol>
+      <li>Go to <b>console.cloud.google.com</b> and sign in with your Super Admin account.</li>
+      <li>A welcome window appears the first time. Choose your <b>Country</b>, tick the box to agree to the <b>Terms of Service</b>, and click <span class="ui">Agree and continue</span>.</li>
+      <li>If Google offers a free trial or asks you to add a credit card, <b>skip it</b>. Nothing in this guide needs billing.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="chrome"><div class="dots"><span></span><span></span><span></span></div><div class="url">console.cloud.google.com</div></div>
+      <div style="padding:14pt 40pt; background:#f8f9fa">
+        <div class="dialog" style="max-width:3.6in;margin:auto">
+          <div style="font-size:11pt;margin-bottom:6pt">Welcome, Alex!</div>
+          <div class="sub">Create and manage your projects and resources.</div>
+          <div class="fld mark"><span class="lbl">Country</span>United States ▾</div>
+          <div class="mark" style="display:inline-block;padding:1pt 3pt"><span class="check"></span>I agree to the Google Cloud Platform Terms of Service</div>
+          <div style="text-align:right;margin-top:8pt"><span class="btn p mark">AGREE AND CONTINUE</span></div>
+        </div>
+      </div></div>
+      <figcaption>The welcome window. Pick your country, tick the box, then Agree and continue.</figcaption></figure>
+</template>
+<template id="tpl-org">
+<p>Google Cloud groups everything for <span class="v-domain">yourcompany.com</span> under an <b>organization</b>. Companies on Google Workspace get one automatically, usually the first time a Super Admin signs in to Google Cloud. You only need to check it is there.</p>
+    <ol>
+      <li>At the top of the page, click the <b>project picker</b> (next to the Google Cloud logo; it may read <span class="ui">Select a project</span>).</li>
+      <li>In the window that opens, click the <span class="ui">All</span> tab.</li>
+      <li>You should see <b><span class="v-domain">yourcompany.com</span></b> with a building icon. That is your organization.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="gbar"><div class="logo"><b>Google</b> Cloud</div><div class="picker mark">Select a project ▾</div><div class="search">Search (/) for resources, docs, products</div><div class="acct">A</div></div>
+      <div style="padding:10pt 30pt;background:#f8f9fa">
+        <div class="dialog">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6pt"><span style="font-size:10.5pt">Select a resource</span><span class="btn s">NEW PROJECT</span></div>
+          <div style="display:flex;gap:12pt;border-bottom:1px solid #e3e6ea;padding-bottom:3pt;margin-bottom:5pt"><span class="small">RECENT</span><span class="small">STARRED</span><span class="mark" style="color:#1a73e8;font-weight:600">ALL</span></div>
+          <table class="gtable"><tr><th>Name</th><th>Type</th><th>ID</th></tr>
+            <tr class="mark"><td>🏢 <span class="v-domain">yourcompany.com</span></td><td>Organization</td><td>123456789012</td></tr></table>
+        </div></div></div>
+      <figcaption>The project picker's All tab, showing your organization.</figcaption></figure>
+    <div class="box info"><div class="t">Don't see your organization?</div>
+    <ul><li>Wait 5–10 minutes after Step <span class="ref" data-ref="open"></span>, then refresh the page. It is created in the background.</li>
+    <li>Check the account in the top-right corner is your <b>@<span class="v-domain">yourcompany.com</span></b> Super Admin account, not a personal one.</li>
+    <li>Still missing after 30 minutes? Email us. Do not create a project yet: a project created without an organization cannot be used for this.</li></ul></div>
+</template>
+<template id="tpl-perm">
+<p>New organizations come with strict security policies switched on. One of them would block this setup, and Step <span class="ref" data-ref="drs"></span> relaxes it for <b>this project only</b>. Even a Super Admin needs one extra role to do that, so you give it to yourself first.</p>
+    <ol>
+      <li>Open the menu (☰, top left) and go to <span class="ui">IAM &amp; Admin → IAM</span>.</li>
+      <li>In the project picker at the top, select your <b>organization (<span class="v-domain">yourcompany.com</span>)</b>, not a project. The page title should read <i>Permissions for organization "<span class="v-domain">yourcompany.com</span>"</i>.</li>
+      <li>Click <span class="ui">Grant access</span>.</li>
+      <li>Under <b>New principals</b>, type your own email address.</li>
+      <li>Under <b>Select a role</b>, search for and choose <b>Organization Policy Administrator</b>.</li>
+      <li>Click <span class="ui">Save</span>.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="gbar"><div class="logo"><b>Google</b> Cloud</div><div class="picker mark">🏢 <span class="v-domain">yourcompany.com</span> ▾</div><div class="search">Search</div><div class="acct">A</div></div>
+      <div class="gbody"><div class="gnav"><div class="h">IAM &amp; Admin</div><div class="i on">IAM</div><div class="i">Identity &amp; Organization</div><div class="i">Policy Troubleshooter</div><div class="i">Organization Policies</div><div class="i">Service Accounts</div><div class="i">Settings</div></div>
+      <div class="gmain"><div class="title">Permissions for organization "<span class="v-domain">yourcompany.com</span>"</div>
+        <div style="display:flex;gap:10pt">
+          <div style="flex:1"><span class="btn s mark">+ GRANT ACCESS</span>
+          <table class="gtable" style="margin-top:6pt"><tr><th>Principal</th><th>Role</th></tr><tr><td>alex@<span class="v-domain">yourcompany.com</span></td><td>Organization Administrator</td></tr></table></div>
+          <div class="dialog" style="width:2.4in"><div style="font-weight:600;margin-bottom:6pt">Grant access to "<span class="v-domain">yourcompany.com</span>"</div>
+          <div class="fld mark"><span class="lbl">New principals *</span>alex@<span class="v-domain">yourcompany.com</span></div>
+          <div class="fld mark"><span class="lbl">Select a role *</span>Organization Policy Administrator</div>
+          <div><span class="btn p">SAVE</span> <span class="btn s">CANCEL</span></div></div>
+        </div></div></div></div>
+      <figcaption>Grant yourself Organization Policy Administrator on the organization.</figcaption></figure>
+    <div class="box warn"><div class="t">If "Grant access" is greyed out</div><p>Your account does not manage the organization yet. A Super Admin can fix this: in the same IAM page, with the organization selected, grant your account <b>Organization Administrator</b> first, then repeat this step. If you are the Super Admin and it is still greyed out, email us and we'll do it with you on a short screen-share.</p></div>
+</template>
+<template id="tpl-project">
+<ol>
+      <li>Click the project picker at the top, then <span class="ui">New project</span>.</li>
+      <li><b>Project name:</b> <code>CRM Google Integration</code>. Google fills in a <b>Project ID</b> underneath; leave it as it is.</li>
+      <li><b>Organization:</b> choose <b><span class="v-domain">yourcompany.com</span></b>.</li>
+      <li><b>Location:</b> also <b><span class="v-domain">yourcompany.com</span></b>. Never "No organization".</li>
+      <li>Click <span class="ui">Create</span>. After a few seconds a notification says the project is ready. Click <span class="ui">Select project</span> in it.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="gbar"><div class="logo"><b>Google</b> Cloud</div><div class="picker">🏢 <span class="v-domain">yourcompany.com</span> ▾</div><div class="search">Search</div><div class="acct">A</div></div>
+      <div class="gmain" style="max-width:3.8in"><div class="title">New Project</div>
+        <div class="fld mark"><span class="lbl">Project name *</span>CRM Google Integration</div>
+        <div class="small" style="margin:-3pt 0 7pt">Project ID: crm-google-integration-123456. It cannot be changed later.</div>
+        <div class="fld mark"><span class="lbl">Organization *</span>🏢 <span class="v-domain">yourcompany.com</span> ▾</div>
+        <div class="fld mark"><span class="lbl">Location *</span>🏢 <span class="v-domain">yourcompany.com</span> &nbsp; <span style="color:#1a73e8;float:right">BROWSE</span></div>
+        <span class="btn p">CREATE</span> <span class="btn s">CANCEL</span></div></div>
+      <figcaption>Both Organization and Location must be your domain.</figcaption></figure>
+</template>
+<template id="tpl-drs">
+<p>A security policy called <b>Domain restricted sharing</b> only lets accounts from <span class="v-domain">yourcompany.com</span> be added to your projects. Without this step, Google rejects the invitation in Step <span class="ref" data-ref="invite"></span> with an error like <i>"The 'Domain Restricted Sharing' organization policy is enforced."</i> You add Big Spoon's company to the allowed list for this one project.</p>
+    <ol>
+      <li>Menu ☰ → <span class="ui">IAM &amp; Admin → Organization Policies</span>. Check the picker shows <b>CRM Google Integration</b>.</li>
+      <li>In the <b>Filter</b> box, type <code>Domain restricted sharing</code>. Click the policy's name. Its ID is <code>iam.allowedPolicyMemberDomains</code>.</li>
+      <li>Click <span class="ui">Manage policy</span>.</li>
+      <li>Under <b>Policy source</b>, choose <b>Override parent's policy</b>.</li>
+      <li>Under <b>Policy enforcement</b>, choose <b>Merge with parent</b>. This keeps your own domain allowed and adds ours.</li>
+      <li>Under <b>Rules</b>, click <span class="ui">Add a rule</span>. Set <b>Policy values</b> to <b>Custom</b> and <b>Policy type</b> to <b>Allow</b>.</li>
+      <li>In <b>Custom value</b>, paste Big Spoon's customer ID: <code>C01lltan0</code>. Click <span class="ui">Done</span>.</li>
+      <li>Click <span class="ui">Set policy</span>.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="gbar"><div class="logo"><b>Google</b> Cloud</div><div class="picker mark">CRM Google Integration ▾</div><div class="search">Search</div><div class="acct">A</div></div>
+      <div class="gmain"><div class="crumbs">Organization Policies › <b>Domain restricted sharing</b> › Edit policy</div>
+        <div class="two"><div>
+          <div style="font-weight:600;margin-bottom:3pt">Policy source</div>
+          <div class="radio">Inherit parent's policy</div><div class="radio on mark" style="display:inline-block">Override parent's policy</div>
+          <div style="font-weight:600;margin:7pt 0 3pt">Policy enforcement</div>
+          <div class="radio on mark" style="display:inline-block">Merge with parent</div><div class="radio">Replace</div>
+        </div><div>
+          <div style="font-weight:600;margin-bottom:3pt">Rules</div>
+          <div class="dialog" style="padding:7pt 9pt"><div class="fld"><span class="lbl">Policy values</span>Custom ▾</div>
+          <div class="fld"><span class="lbl">Policy type</span>Allow ▾</div>
+          <div class="fld mark"><span class="lbl">Custom value 1</span>C01lltan0</div><span class="btn s">DONE</span></div>
+        </div></div>
+        <div style="margin-top:8pt"><span class="btn p mark">SET POLICY</span> <span class="btn s">CANCEL</span></div></div></div>
+      <figcaption>Override for this project, merge with the parent, and allow Big Spoon's customer ID.</figcaption></figure>
+    <div class="box info"><div class="t">What you might see instead</div>
+    <ul><li><b>The policy says "Not enforced" or isn't listed.</b> Your organization doesn't restrict this. Skip to the next step.</li>
+    <li><b>You see "Restrict allowed policy members in IAM allow policies"</b> (<code>iam.managed.allowedPolicyMembers</code>) enforced instead. That is Google's newer version of the same policy. Email us and we'll go through it together on a 10-minute call.</li>
+    <li><b>"Manage policy" is greyed out.</b> Step <span class="ref" data-ref="perm"></span> hasn't taken effect. Wait two minutes and refresh.</li></ul></div>
+</template>
+<template id="tpl-invite">
+<ol>
+      <li>Menu ☰ → <span class="ui">IAM &amp; Admin → IAM</span>, with <b>CRM Google Integration</b> selected (the title reads <i>Permissions for project "CRM Google Integration"</i>).</li>
+      <li>Click <span class="ui">Grant access</span>.</li>
+      <li><b>New principals:</b> <code>tech@bigspoon.ai</code></li>
+      <li><b>Role:</b> <b>Editor</b> (under Basic).</li>
+      <li>Click <span class="ui">Save</span>. If you get a "Domain restricted sharing" error, recheck Step <span class="ref" data-ref="drs"></span>.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="gbar"><div class="logo"><b>Google</b> Cloud</div><div class="picker mark">CRM Google Integration ▾</div><div class="search">Search</div><div class="acct">A</div></div>
+      <div class="gmain"><div class="title">Permissions for project "CRM Google Integration"</div>
+        <div class="dialog" style="max-width:3.4in"><div style="font-weight:600;margin-bottom:6pt">Grant access to "CRM Google Integration"</div>
+        <div class="fld mark"><span class="lbl">New principals *</span>tech@bigspoon.ai</div>
+        <div class="fld mark"><span class="lbl">Select a role *</span>Basic › Editor</div>
+        <span class="btn p">SAVE</span></div></div></div>
+      <figcaption>Invite Big Spoon's account as Editor on this project only.</figcaption></figure>
+</template>
+<template id="tpl-company">
+<p class="dyn-company-intro"></p>
+    <ol>
+      <li>Go to <b>admin.google.com</b>. Menu ☰ → <span class="ui">Directory → Users</span>, then click <span class="ui">Add new user</span>.</li>
+      <li><b>First name:</b> <code>CRM</code>. <b>Last name:</b> <code>Integration</code>. <b>Primary email:</b> <code>crm</code> (making <code>crm@<span class="v-domain">yourcompany.com</span></code>). If that address is taken, any name works; tell us which.</li>
+      <li>Open <b>Manage user's password</b>: choose <b>Create password</b>, set a long random one, and <b>untick</b> "Ask for a password change at the next sign-in".</li>
+      <li>Click <span class="ui">Add new user</span>. This uses one Google Workspace licence.</li>
+      <li>In a private (Incognito) Chrome window, sign in once at <b>mail.google.com</b> as <code>crm@<span class="v-domain">yourcompany.com</span></code> and click through Google's welcome screens.</li>
+      <li>Share the address and password with us through a password manager or a phone call, <b>never in a plain email</b>.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="chrome"><div class="dots"><span></span><span></span><span></span></div><div class="url">admin.google.com/ac/users</div></div>
+      <div class="admin-bar"><span class="logo">Google Admin</span><div class="search" style="flex:1;background:#f1f3f4;border-radius:4px;padding:3pt 8pt;color:#80868b">Search for users, groups or settings</div></div>
+      <div class="gmain"><div class="crumbs">Directory › Users › <b>Add new user</b></div>
+        <div class="dialog" style="max-width:4.2in">
+          <div class="two"><div class="fld mark"><span class="lbl">First name *</span>CRM</div><div class="fld mark"><span class="lbl">Last name *</span>Integration</div></div>
+          <div class="fld mark"><span class="lbl">Primary email *</span>crm &nbsp;<span style="color:#5f6368">@<span class="v-domain">yourcompany.com</span></span></div>
+          <div style="font-weight:600;margin:3pt 0">Manage user's password</div>
+          <div class="radio">Automatically generate a password</div><div class="radio on mark" style="display:inline-block">Create password</div>
+          <div class="mark" style="display:block;width:fit-content;margin-top:3pt;padding:1pt 3pt"><span class="uncheck"></span>Ask for a password change at the next sign-in</div>
+          <div style="text-align:right;margin-top:6pt"><span class="btn s">CANCEL</span> <span class="btn p">ADD NEW USER</span></div>
+        </div></div></div>
+      <figcaption>Create crm@ with your own password, and untick the forced password change.</figcaption></figure>
+    <div class="box info"><div class="t">Good to know</div>
+    <ul><li><b>Your company requires 2-Step Verification?</b> Set it up for this account with an authenticator app on a company phone that you control. When we connect the account in Part 3, we'll do it on a 5-minute call so you can read us the code.</li>
+    <li><b>Shared inbox: already receive those emails at another address</b>, such as a Gmail account? Keep using it for now. We'll set up forwarding to this account later, as a separate step.</li></ul></div>
+</template>
+<template id="tpl-projid">
+<ol>
+      <li>With <b>CRM Google Integration</b> selected, open Menu ☰ → <span class="ui">Cloud overview → Dashboard</span>.</li>
+      <li>Copy the <b>Project ID</b> from the <b>Project info</b> card. It is the one with dashes, for example <code>crm-google-integration-123456</code>, not the long number.</li>
+      <li>Email it to <b>tech@bigspoon.ai</b> and tell us Part 1 is done.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="gbar"><div class="logo"><b>Google</b> Cloud</div><div class="picker">CRM Google Integration ▾</div><div class="search">Search</div><div class="acct">A</div></div>
+      <div class="gmain"><div class="title">Welcome</div>
+        <div class="dialog" style="max-width:3in"><div style="font-weight:600;margin-bottom:4pt">Project info</div>
+        <div class="small">Project name</div><div>CRM Google Integration</div>
+        <div class="small" style="margin-top:4pt">Project number</div><div>418273650912</div>
+        <div class="small" style="margin-top:4pt">Project ID</div><div class="mark" style="display:inline-block">crm-google-integration-123456</div></div></div></div>
+      <figcaption>Send us the Project ID, not the project number.</figcaption></figure>
+</template>
+<template id="tpl-trusted">
+<p>This tells Google Workspace your company approves the CRM, so employees are not blocked when they connect their Gmail and Calendar.</p>
+    <ol>
+      <li>Go to <b>admin.google.com</b>. Menu ☰ → <span class="ui">Security → Access and data control → API controls</span>.</li>
+      <li>Under <b>App access control</b>, click <span class="ui">Manage Third-Party App Access</span>.</li>
+      <li>Click <span class="ui">Configure new app</span>, then choose <b>OAuth App Name Or Client ID</b>.</li>
+      <li>Paste the <b>OAuth Client ID</b> we sent you and click <span class="ui">Search</span>. Select the app that appears (it carries your CRM's name), then <span class="ui">Select</span>.</li>
+      <li>Tick the Client ID, click <span class="ui">Select</span>. For <b>Scope</b>, keep your whole organization (<span class="v-domain">yourcompany.com</span>).</li>
+      <li>For <b>Access to Google data</b>, choose <b>Trusted</b>. Click <span class="ui">Continue</span>, then <span class="ui">Finish</span>.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="chrome"><div class="dots"><span></span><span></span><span></span></div><div class="url">admin.google.com</div></div>
+      <div class="admin-bar"><span class="logo">Google Admin</span><div class="search" style="flex:1;background:#f1f3f4;border-radius:4px;padding:3pt 8pt;color:#80868b">Search for users, groups or settings</div></div>
+      <div class="gmain"><div class="crumbs">Security › Access and data control › API controls › <b>App access control</b> › Configure new app</div>
+        <div class="two"><div class="dialog">
+          <div style="font-weight:600;margin-bottom:4pt">① App</div>
+          <div class="fld mark"><span class="lbl">OAuth App Name Or Client ID</span>1234…apps.googleusercontent.com</div>
+          <table class="gtable"><tr><td class="mark">Your CRM</td><td class="small">Web application</td></tr></table>
+        </div><div class="dialog">
+          <div style="font-weight:600;margin-bottom:4pt">③ Access to Google Data</div>
+          <div class="radio on mark" style="display:inline-block">Trusted</div><div class="small" style="margin-left:12pt">Can access all Google services</div>
+          <div class="radio">Limited</div><div class="radio">Blocked</div>
+          <div style="margin-top:6pt;text-align:right"><span class="btn p">CONTINUE</span></div>
+        </div></div></div></div>
+      <figcaption>Find the app by its Client ID and set it to Trusted.</figcaption></figure>
+</template>
+<template id="tpl-driveshare">
+<p>The CRM imports merchant documents from your company Shared Drive. You add <code>crm@<span class="v-domain">yourcompany.com</span></code> (from Step <span class="ref" data-ref="company"></span>) as a <b>Viewer</b>. The CRM can then read that drive and nothing else.</p>
+    <ol>
+      <li>Go to <b>drive.google.com</b> → <span class="ui">Shared drives</span>, and open the drive the CRM should import from.</li>
+      <li>Click the drive's name at the top → <span class="ui">Manage members</span>.</li>
+      <li>Type <code>crm@<span class="v-domain">yourcompany.com</span></code>. Set the role to <b>Viewer</b>, untick <b>Notify people</b>, and click <span class="ui">Share</span>.</li>
+      <li>More than one drive to import from? Repeat for each.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="chrome"><div class="dots"><span></span><span></span><span></span></div><div class="url">drive.google.com/drive/shared-drives</div></div>
+      <div style="padding:12pt 30pt;background:#f8f9fa"><div class="dialog">
+        <div style="font-size:10.5pt;margin-bottom:6pt">Share "Merchant Documents"</div>
+        <div style="display:flex;gap:6pt"><div class="fld mark" style="flex:1"><span class="lbl">Add people and groups</span>crm@<span class="v-domain">yourcompany.com</span></div><div class="fld mark" style="width:1.1in">Viewer ▾</div></div>
+        <div class="mark" style="display:inline-block;padding:1pt 3pt"><span class="uncheck"></span>Notify people</div>
+        <div style="text-align:right;margin-top:6pt"><span class="btn s">Cancel</span> <span class="btn p">Share</span></div>
+      </div></div></div>
+      <figcaption>Add the CRM's company account as Viewer, with Notify people unticked.</figcaption></figure>
+</template>
+<template id="tpl-done">
+<p class="dyn-done"></p>
+</template>
+<template id="tpl-sakey">
+<p>The CRM reads your Shared Drive through a <b>service account</b>, a robot account that belongs to this project. It needs a key to sign in, and a default policy blocks keys. You allow them on this project only. The key will be stored encrypted in the CRM's secret settings and never shared.</p>
+    <ol>
+      <li>Still in <span class="ui">Organization Policies</span>, with <b>CRM Google Integration</b> selected.</li>
+      <li>Filter for <code>Disable service account key creation</code>. You may see <b>two</b> entries: <code>iam.disableServiceAccountKeyCreation</code> and <code>iam.managed.disableServiceAccountKeyCreation</code>. Do the following for each one that shows <b>Enforced</b>:
+        <ol type="a"><li>Click it, then <span class="ui">Manage policy</span>.</li>
+        <li><b>Policy source:</b> <b>Override parent's policy</b>.</li>
+        <li>Under <b>Rules</b>, set <b>Enforcement</b> to <b>Off</b>.</li>
+        <li>Click <span class="ui">Set policy</span>.</li></ol></li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="gbar"><div class="logo"><b>Google</b> Cloud</div><div class="picker mark">CRM Google Integration ▾</div><div class="search">Search</div><div class="acct">A</div></div>
+      <div class="gbody"><div class="gnav"><div class="h">IAM &amp; Admin</div><div class="i">IAM</div><div class="i on">Organization Policies</div><div class="i">Service Accounts</div></div>
+      <div class="gmain">
+        <div class="fld" style="max-width:3in"><span class="lbl">Filter</span>Disable service account key creation</div>
+        <table class="gtable"><tr><th>Name</th><th>ID</th><th>Status</th></tr>
+          <tr class="mark"><td>Disable service account key creation</td><td>iam.disableServiceAccountKeyCreation</td><td><span class="chip">Enforced</span></td></tr>
+          <tr class="mark"><td>Disable service account key creation</td><td>iam.managed.disableServiceAccountKeyCreation</td><td><span class="chip">Enforced</span></td></tr></table>
+        <div class="dialog" style="margin-top:8pt;max-width:3.3in"><div style="font-weight:600">Rules</div>
+          <div class="radio">On</div><div class="radio on mark" style="display:inline-block">Off</div>
+          <div style="margin-top:6pt"><span class="btn p">SET POLICY</span></div></div>
+      </div></div></div>
+      <figcaption>Turn enforcement off for this project, on every entry that shows Enforced.</figcaption></figure>
+</template>
+<template id="tpl-outside">
+<p>The service account's address ends in <code>gserviceaccount.com</code>, so Google treats it as outside your company.</p>
+    <ol>
+      <li>In admin.google.com: Menu ☰ → <span class="ui">Apps → Google Workspace → Drive and Docs → Sharing settings</span>.</li>
+      <li>Open <b>Sharing options</b>. Make sure sharing outside <span class="v-domain">yourcompany.com</span> is <b>On</b> for the people who manage the Shared Drive. You can apply this to just their group or organizational unit.</li>
+      <li>Open <b>Shared drive creation</b>. Make sure <b>"Prevent people outside <span class="v-domain">yourcompany.com</span> from accessing files in shared drives"</b> is <b>not</b> ticked.</li>
+    </ol>
+</template>
+<template id="tpl-sashare">
+<ol>
+      <li>Go to <b>drive.google.com</b> → <span class="ui">Shared drives</span>, and open the drive the CRM should import from.</li>
+      <li>Click the drive's name at the top → <span class="ui">Manage members</span>.</li>
+      <li>Paste the <b>service account email</b> we sent you. Set the role to <b>Viewer</b>, untick <b>Notify people</b>, and click <span class="ui">Share</span>. If asked to confirm sharing outside your organization, confirm.</li>
+      <li>Optional: open the drive's <span class="ui">Shared drive settings</span> and check <b>Allow people outside <span class="v-domain">yourcompany.com</span> to access files</b> is on.</li>
+    </ol>
+    <figure class="shot"><div class="screen"><span class="illus">Illustration</span>
+      <div class="chrome"><div class="dots"><span></span><span></span><span></span></div><div class="url">drive.google.com/drive/shared-drives</div></div>
+      <div style="padding:12pt 30pt;background:#f8f9fa"><div class="dialog">
+        <div style="font-size:10.5pt;margin-bottom:6pt">Share "Merchant Documents"</div>
+        <div style="display:flex;gap:6pt"><div class="fld mark" style="flex:1"><span class="lbl">Add people and groups</span>crm-drive-import@crm-google-integration-123456.iam.gserviceaccount.com</div><div class="fld mark" style="width:1.1in">Viewer ▾</div></div>
+        <div class="mark" style="display:inline-block;padding:1pt 3pt"><span class="uncheck"></span>Notify people</div>
+        <div style="text-align:right;margin-top:6pt"><span class="btn s">Cancel</span> <span class="btn p">Share</span></div>
+      </div></div></div>
+      <figcaption>Add the service account as Viewer, with Notify people unticked.</figcaption></figure>
+</template>
+<template id="tpl-intro">
+<div class="box info"><div class="t">What this does and does not give Big Spoon</div>
+  <p>Big Spoon gets access to <b>one new, empty Google Cloud project</b> that you own. We cannot see your users, email, calendars or files. Each employee decides for themselves when to connect their own Google account to the CRM, and only accounts on <span class="v-domain">yourcompany.com</span> can do so. You can remove Big Spoon at any time (last page).</p></div>
+
+  <div class="box warn"><div class="t">Before you start</div>
+  <ul>
+    <li>Use the account of a <b>Super Admin</b> of <span class="v-domain">yourcompany.com</span>. If you are not sure, open <b>admin.google.com</b>: if it shows the Admin console with <span class="ui">Users</span>, <span class="ui">Security</span> and <span class="ui">Billing</span>, you are an admin. Super Admin is shown under <span class="ui">Account → Admin roles</span>.</li>
+    <li>Use Google Chrome, and sign out of any personal Gmail accounts first, or open a fresh Chrome profile. Most mistakes in this guide come from being signed in with the wrong account.</li>
+    <li>The screens in this guide are illustrations. Google updates its pages, so yours may look slightly different, but the button and menu names are the same. Questions at any step: <b>tech@bigspoon.ai</b>.</li>
+  </ul></div>
+</template>
+
+<script>
+(() => {
+  const DEV_EMAIL = "tech@bigspoon.ai";
+  const FEATURES = [
+    { id: "signin", name: "Sign in with Google", desc: "Staff log in to the CRM with their Google account.", who: "each" },
+    { id: "send", name: "Send email", desc: "Send email from the CRM, from each person's own address.", who: "each" },
+    { id: "history", name: "Email history", desc: "Emails with a customer are logged on their record.", who: "each" },
+    { id: "inbox", name: "Shared inbox", desc: "Emails to one company address become new records, e.g. leads.", who: "company" },
+    { id: "calendar", name: "Calendar sync", desc: "CRM bookings and Google Calendar events stay in step.", who: "each" },
+    { id: "availability", name: "Availability", desc: "See when someone is free or busy before booking.", who: "each" },
+    { id: "meet", name: "Meet links", desc: "Meetings booked from the CRM get a Google Meet link.", who: "each" },
+    { id: "drive", name: "Drive import", desc: "Read files from your company Shared Drive into records.", who: "company" },
+    { id: "savedrive", name: "Save to Drive", desc: "Save documents from the CRM into your own Google Drive.", who: "each" },
+    { id: "contacts", name: "Contacts sync", desc: "CRM contacts stay in step with Google Contacts.", who: "each" },
+    { id: "sheets", name: "Sheets", desc: "Import lists from, or export reports to, Google Sheets.", who: "each" },
+  ];
+  const FNAME = Object.fromEntries(FEATURES.map(f => [f.id, f.name]));
+  const has = (s, id) => s.f.has(id);
+  const needsCompany = s => has(s, "inbox") || (has(s, "drive") && !s.sa);
+  const STEPS = [
+    { id: "open", part: 1, title: "Open Google Cloud for the first time", min: 2 },
+    { id: "org", part: 1, title: "Check that your organization exists", min: 2 },
+    { id: "perm", part: 1, title: "Give yourself permission to change security policies", min: 3 },
+    { id: "project", part: 1, title: "Create the project for the CRM", min: 3 },
+    { id: "drs", part: 1, title: "Allow Big Spoon's account on this project (\"Domain restricted sharing\")", min: 5 },
+    { id: "sakey", part: 1, title: "Allow a service account key on this project", min: 4, only: ["drive"], when: s => has(s, "drive") && s.sa },
+    { id: "invite", part: 1, title: "Invite Big Spoon to the project", min: 2 },
+    { id: "company", part: 1, title: "Create the CRM's company account", min: 10, only: ["inbox", "drive"], when: needsCompany },
+    { id: "projid", part: 1, title: "Send Big Spoon the Project ID", min: 1 },
+    { id: "trusted", part: 3, title: "Mark the CRM app as Trusted", min: 4 },
+    { id: "outside", part: 3, title: d => `Allow Shared Drive members from outside ${d}`, min: 3, only: ["drive"], when: s => has(s, "drive") && s.sa },
+    { id: "driveshare", part: 3, title: "Share your Shared Drive with the CRM's company account", min: 3, only: ["drive"], when: s => has(s, "drive") && !s.sa },
+    { id: "sashare", part: 3, title: "Add the service account to the Shared Drive", min: 2, only: ["drive"], when: s => has(s, "drive") && s.sa },
+    { id: "done", part: 3, title: "Tell Big Spoon you're done", min: 1 },
+  ];
+  const PARTS = {
+    1: { p: "Part 1 · You", n: "Prepare Google Cloud", d: "Use a computer, not a phone." },
+    3: { p: "Part 3 · You", n: "Approve the CRM and finish", d: "In the Google Admin console, admin.google.com." },
+  };
+
+  const $ = sel => document.querySelector(sel);
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable: ticks just won't persist */ } },
+  };
+  const esc = s => String(s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+
+  function normalizeDomain(raw) {
+    let d = (raw || "").trim().toLowerCase();
+    d = d.replace(/^https?:\/\//, "").replace(/^www\./, "");
+    if (d.includes("@")) d = d.slice(d.lastIndexOf("@") + 1);
+    d = d.split(/[\/?#\s]/)[0];
+    return d;
+  }
+  const validDomain = d => /^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(d);
+  const consumer = d => /^(gmail|googlemail|outlook|hotmail|yahoo|icloud|live|aol)\.com$/.test(d);
+
+  // ---- state ----
+  const params = new URLSearchParams(location.search);
+  const last = (() => { try { return JSON.parse(store.get("bsgws:last") || "null"); } catch { return null; } })();
+  const state = {
+    domain: normalizeDomain(params.get("domain") ?? last?.domain ?? ""),
+    f: new Set((params.get("features") ?? last?.features ?? "").split(",").filter(id => FNAME[id])),
+    sa: (params.get("sa") ?? (last?.sa ? "1" : "0")) === "1",
+  };
+  const shownDomain = () => (validDomain(state.domain) ? state.domain : "yourcompany.com");
+  const doneKey = id => `bsgws:done:${shownDomain()}:${id}`;
+
+  function shareUrl() {
+    const u = new URL(location.href.split("?")[0]);
+    if (state.domain) u.searchParams.set("domain", state.domain);
+    if (state.f.size) u.searchParams.set("features", [...state.f].join(","));
+    if (state.sa && state.f.has("drive")) u.searchParams.set("sa", "1");
+    return u.toString();
+  }
+  function persist() {
+    store.set("bsgws:last", JSON.stringify({ domain: state.domain, features: [...state.f].join(","), sa: state.sa }));
+    try { history.replaceState(null, "", shareUrl()); } catch { /* file:// in some browsers */ }
+  }
+
+  // ---- controls ----
+  const fbox = $("#features");
+  fbox.innerHTML = FEATURES.map(f => `
+    <label class="feature" data-id="${f.id}">
+      <input type="checkbox" value="${f.id}">
+      <span><span class="fn">${esc(f.name)}</span><br><span class="fd">${esc(f.desc)}</span>
+      <div class="fw ${f.who === "each" ? "each" : ""}">${f.who === "each" ? "Each person connects" : "Uses the company account"}</div></span>
+    </label>`).join("");
+  fbox.addEventListener("change", e => {
+    const id = e.target.value; if (!id) return;
+    e.target.checked ? state.f.add(id) : state.f.delete(id);
+    render();
+  });
+  const domainEl = $("#domain");
+  domainEl.value = state.domain;
+  domainEl.addEventListener("input", () => { state.domain = normalizeDomain(domainEl.value); render(); });
+  $("#sa").checked = state.sa;
+  $("#sa").addEventListener("change", e => { state.sa = e.target.checked; render(); });
+
+  // ---- rendering ----
+  function visibleSteps() { return STEPS.filter(s => !s.when || s.when(state)); }
+  function tagLine(step) {
+    if (!step.only) return '<span class="tag all">All features</span>';
+    const on = step.only.filter(id => state.f.has(id));
+    return "Only for " + on.map(id => `<span class="tag opt">${esc(FNAME[id])}</span>`).join("");
+  }
+  function stepTitle(step) { return typeof step.title === "function" ? step.title(shownDomain()) : step.title; }
+
+  function render() {
+    const d = shownDomain();
+    const steps = visibleSteps();
+    const numbers = Object.fromEntries(steps.map((s, i) => [s.id, i + 1]));
+
+    // domain message
+    const msg = $("#domain-msg");
+    if (!state.domain) { msg.textContent = "Examples below use yourcompany.com until you enter yours."; msg.className = "domain-msg"; }
+    else if (!validDomain(state.domain)) { msg.textContent = "That doesn't look like a domain yet, e.g. acme.com"; msg.className = "domain-msg bad"; }
+    else if (consumer(state.domain)) { msg.textContent = "This guide needs your company's own Google Workspace domain, not a personal email provider. Email us if you're unsure."; msg.className = "domain-msg bad"; }
+    else { msg.textContent = "✓ Steps below now use " + state.domain; msg.className = "domain-msg"; }
+
+    // features
+    fbox.querySelectorAll(".feature").forEach(el => {
+      const on = state.f.has(el.dataset.id);
+      el.classList.toggle("on", on); el.querySelector("input").checked = on;
+    });
+    $("#sa-opt").classList.toggle("show", state.f.has("drive"));
+
+    // guide
+    const g = $("#guide");
+    g.innerHTML = "";
+    let part = 0;
+    const companyNeeded = needsCompany(state);
+    for (const step of steps) {
+      if (step.part !== part) {
+        if (part === 1) g.insertAdjacentHTML("beforeend", part2Html());
+        part = step.part;
+        const P = PARTS[part];
+        const range = steps.filter(s => s.part === part);
+        const mins = range.reduce((a, s) => a + s.min, 0);
+        g.insertAdjacentHTML("beforeend", `<div class="part"><div class="p">${P.p}</div><div class="n">${P.n}</div><div class="d">Steps ${numbers[range[0].id]}–${numbers[range.at(-1).id]} · about ${mins} minutes · ${P.d}</div></div>`);
+        if (part === 1) g.appendChild(document.getElementById("tpl-intro").content.cloneNode(true));
+      }
+      const art = document.createElement("article");
+      art.className = "step"; art.id = "step-" + step.id;
+      const done = store.get(doneKey(step.id)) === "1";
+      art.classList.toggle("is-done", done);
+      art.innerHTML = `<div class="step-head"><div class="step-num">${numbers[step.id]}</div><div class="step-title">${esc(stepTitle(step))}</div><div class="step-meta">${step.min} min</div>
+        <label class="done-toggle no-print"><input type="checkbox" ${done ? "checked" : ""}> Done</label></div>
+        <div class="applies">${tagLine(step)}</div>`;
+      art.appendChild(document.getElementById("tpl-" + step.id).content.cloneNode(true));
+      art.querySelector(".done-toggle input").addEventListener("change", e => {
+        store.set(doneKey(step.id), e.target.checked ? "1" : "0");
+        art.classList.toggle("is-done", e.target.checked);
+        updateStats(steps);
+      });
+      g.appendChild(art);
+    }
+
+    // feature-dependent text inside steps
+    const ci = g.querySelector(".dyn-company-intro");
+    if (ci) {
+      const jobs = [];
+      if (state.f.has("inbox")) jobs.push("receives the emails for your shared inbox");
+      if (state.f.has("drive") && !state.sa) jobs.push(`reads the Shared Drive you share with it in Step ${numbers.driveshare}`);
+      ci.innerHTML = `Your CRM needs one Google account of its own, on your domain. It ${jobs.join(" and ")}. It is not a person's account, so nothing breaks when someone leaves, and it can only see what you share with it. We also use it for testing.`;
+      g.querySelectorAll("#step-company li").forEach(li => { if (li.textContent.trim().startsWith("Shared inbox:")) li.hidden = !state.f.has("inbox"); });
+    }
+    const dn = g.querySelector(".dyn-done");
+    if (dn) {
+      const drive = state.f.has("drive") ? ` Include the <b>name of the Shared Drive</b> from Step ${numbers.driveshare ?? numbers.sashare}.` : "";
+      dn.innerHTML = `Use the <b>Email Big Spoon</b> button at the top of this page to tell us Part 3 is done; it fills in your domain, features and progress.${drive} We run a final test, which may need one of your staff on a 10-minute screen-share, and confirm when your team can start connecting.`;
+    }
+    g.querySelectorAll(".ref").forEach(r => { r.textContent = numbers[r.dataset.ref] ?? "?"; });
+    document.querySelectorAll(".v-domain").forEach(el => { el.textContent = d; });
+
+    // facts, values, FAQ
+    const mins = steps.reduce((a, s) => a + s.min, 0);
+    $("#fact-time").textContent = `About ${Math.round(mins / 5) * 5} minutes, in two sittings`;
+    $("#fact-cost").textContent = companyNeeded ? "One Workspace licence" : "Free";
+    $("#values").innerHTML = valuesHtml(d, numbers, companyNeeded);
+    $("#faq").innerHTML = faqHtml(d, numbers, companyNeeded);
+    $("#print-head").innerHTML = `<p><b>Domain:</b> ${esc(d)} · <b>Features:</b> ${state.f.size ? [...state.f].map(id => esc(FNAME[id])).join(", ") : "none selected"}</p>`;
+    updateStats(steps);
+    persist();
+  }
+
+  function part2Html() {
+    const sa = state.f.has("drive") && state.sa;
+    const vals = sa ? 'two values: the <b>OAuth Client ID</b> (ends in .apps.googleusercontent.com) and a <b>service account email</b> (ends in .iam.gserviceaccount.com)'
+                    : 'one value: the <b>OAuth Client ID</b> (long, ends in .apps.googleusercontent.com)';
+    return `<div class="part" style="background:#5b6370"><div class="p">Part 2 · Big Spoon</div><div class="n">We build the CRM's Google app</div><div class="d">Nothing for you to do. Within 1–2 business days we email you ${vals}. Then continue with Part 3.</div></div>`;
+  }
+  function valuesHtml(d, n, companyNeeded) {
+    const rows = [
+      [`Big Spoon's account<br><code>${DEV_EMAIL}</code>`, `The account you invite in Step ${n.invite}.`],
+      [`Big Spoon's customer ID<br><code>C01lltan0</code>`, `Lets Google accept that invitation (Step ${n.drs}).`],
+    ];
+    if (companyNeeded) rows.push([`The CRM's company account<br><code>crm@${esc(d)}</code>`, `You create it in Step ${n.company}.`]);
+    rows.push([`<span class="blank">OAuth Client ID (we send it in Part 2)</span>`, `Used in Step ${n.trusted}.`]);
+    if (state.f.has("drive") && state.sa) rows.push([`<span class="blank">Service account email (we send it in Part 2)</span>`, `Used in Step ${n.sashare}.`]);
+    return `<h2>Values you will need</h2><table class="vals"><tr><th style="width:45%">Value</th><th>What it is</th></tr>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>`;
+  }
+  function faqHtml(d, n, companyNeeded) {
+    const sees = companyNeeded
+      ? `For "each person" features, only what that employee approves when they click <b>Connect Google</b>, in their own account. For company-account features, only what you share with <code>crm@${esc(d)}</code>.`
+      : `Only what each employee approves when they click <b>Connect Google</b> in the CRM, in their own account.`;
+    const cost = companyNeeded
+      ? `One Google Workspace licence for <code>crm@${esc(d)}</code> (Step ${n.company}). Everything in Google Cloud is free at your company's usage, and no billing account is needed.`
+      : `Nothing. These Google services are free at your company's usage, and no billing account is needed.`;
+    return `<h2>Common questions</h2>
+      <h3>What can Big Spoon see?</h3><p>Only the "CRM Google Integration" project, which holds the CRM's app settings and nothing else. We have no access to your Admin console, users, email, calendars or files.</p>
+      <h3>What can the CRM see?</h3><p>${sees}</p>
+      <h3>Does this cost anything?</h3><p>${cost}</p>
+      <h3>How do I remove Big Spoon's access later?</h3><p>Google Cloud → <span class="ui">IAM &amp; Admin → IAM</span> with "CRM Google Integration" selected → find ${DEV_EMAIL} → click the pencil icon → <span class="ui">Delete</span> the role. The CRM keeps working. If you want new credentials as well, ask us to rotate them.</p>
+      <h3>How does an employee stop the CRM using their account?</h3><p>In the CRM, click <b>Disconnect Google</b>. Or, in their Google Account, go to <span class="ui">Security → Your connections to third-party apps &amp; services</span> and remove the CRM. A CRM admin can also disconnect a departing employee.</p>
+      <div class="box info"><div class="t">Stuck at any step?</div><p>Email <b>${DEV_EMAIL}</b> with the step number and a screenshot of what you see. We can also do any step with you on a short screen-share.</p></div>`;
+  }
+  function updateStats(steps) {
+    const done = steps.filter(s => store.get(doneKey(s.id)) === "1").length;
+    $("#st-steps").textContent = steps.length;
+    $("#st-min").textContent = steps.reduce((a, s) => a + s.min, 0);
+    $("#st-done").textContent = done;
+    $("#st-bar").style.width = (steps.length ? (100 * done / steps.length) : 0) + "%";
+  }
+
+  // ---- actions ----
+  const toast = t => { const el = $("#toast"); el.textContent = t; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1800); };
+  $("#btn-link").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(shareUrl()); toast("Link copied"); }
+    catch { prompt("Copy this link:", shareUrl()); }
+  });
+  $("#btn-pdf").addEventListener("click", () => window.print());
+  $("#btn-mail").addEventListener("click", () => {
+    const steps = visibleSteps();
+    const n = Object.fromEntries(steps.map((s, i) => [s.id, i + 1]));
+    const done = steps.filter(s => store.get(doneKey(s.id)) === "1");
+    const left = steps.filter(s => store.get(doneKey(s.id)) !== "1");
+    const line = s => `  ${n[s.id]}. ${stepTitle(s)}`;
+    const body = [
+      "Hi Big Spoon,", "",
+      `Domain: ${shownDomain()}`,
+      `Features: ${state.f.size ? [...state.f].map(id => FNAME[id]).join(", ") : "none selected"}`,
+      state.f.has("drive") ? `Drive import via: ${state.sa ? "service account" : "company account (crm@)"}` : null,
+      "", "Done:", ...(done.length ? done.map(line) : ["  (none yet)"]),
+      "", "Still to do:", ...(left.length ? left.map(line) : ["  (nothing)"]),
+      "", "Project ID (from the Project ID step): ",
+      state.f.has("drive") ? "Shared Drive name: " : null,
+      "", "Link to this setup: " + shareUrl(),
+    ].filter(x => x !== null).join("\n");
+    location.href = `mailto:${DEV_EMAIL}?subject=${encodeURIComponent("Google setup – " + shownDomain())}&body=${encodeURIComponent(body)}`;
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
